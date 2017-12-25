@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>flowJS demo13</title>
+</head>
+<body>
+</body>
+<script type="text/javascript" src="./flowJS.js"></script>
+<script type="text/javascript">
+flowJS('子流程A', {
+    init:function(){
+        this.next('子步骤A1');
+    },
+    '子步骤A1':function(){
+        console.log('执行 子步骤A1');
+        console.log('当前步骤：'+this.getCurr());//打印：子步骤A1
+        console.log('父步骤：'+this.parent.getCurr());//打印：步骤A
+        this.parent.next();
+    }
+});
+flowJS('子流程B', {
+    init:function(){
+        console.log('执行 子步骤B init');
+        this.setNext('子步骤B1').setNext('子步骤B2').setNext('子步骤B3');
+        this.next();
+    },
+    '子步骤B1':function(){
+        console.log('执行 子步骤B1');
+        this.next();
+    },
+    '子步骤B2':function(){
+        console.log('执行 子步骤B2');
+        this.next();
+    },
+    '子步骤B3':function(){
+        console.log('执行 子步骤B3');
+        console.log('当前步骤：'+this.getCurr());//打印：子步骤B3
+        console.log('父步骤：'+this.parent.getCurr());//打印：步骤B
+        this.parent.next();
+    }
+});
+flowJS('子流程C', {
+    init:function(){
+        console.log('执行 子步骤C init');
+        this.setNext('子步骤C1').setNext('子步骤C2').setNext('子步骤C3');
+        this.next();
+    },
+    '子步骤C1':function(){
+        console.log('执行 子步骤C1');
+        this.next();
+    },
+    '子步骤C2':function(){
+        console.log('执行 子步骤C2');
+        this.next();
+    },
+    '子步骤C3':function(){
+        console.log('执行 子步骤C3');
+        console.log('当前步骤：'+this.getCurr());//打印：子步骤C3
+        console.log('父步骤：'+this.parent.getCurr());//打印：步骤C
+        this.parent.next();
+    }
+});
+flowJS({
+    init:function(){
+	console.log('执行 init');
+        this.setNext('步骤A').setNext(['步骤B', '步骤C']).setNext('步骤D');
+        this.next();
+    },
+    '步骤A':'子流程A',
+    '步骤B':'子流程B',
+    '步骤C':'子流程C',
+    '步骤D':function(){
+		console.log('当前流程运行的轨迹：');
+		console.log(flowJS.trace);
+    }
+});
+</script>
+</html>
